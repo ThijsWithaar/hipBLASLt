@@ -21,6 +21,7 @@
 #
 # ########################################################################
 
+set( BLIS_DOINIT TRUE)
 if(EXISTS          "/opt/AMD/aocl/aocl-linux-gcc-4.2.0/gcc/lib_ILP64/libblis-mt.a" )
     set( BLIS_LIB /opt/AMD/aocl/aocl-linux-gcc-4.2.0/gcc/lib_ILP64/libblis-mt.a )
     set( BLIS_INCLUDE_DIR /opt/AMD/aocl/aocl-linux-gcc-4.2.0/gcc/include_ILP64/ )
@@ -36,9 +37,13 @@ elseif(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/../deps/amd-blis/lib/ILP64/libblis-mt
 elseif(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/../deps/blis/lib/libblis.a")
     set( BLIS_LIB ${CMAKE_CURRENT_BINARY_DIR}/../deps/blis/lib/libblis.a )
     set( BLIS_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/../deps/blis/include/blis )
-elseif(EXISTS      "/usr/local/lib/libblis.a")
+elseif(EXISTS "/usr/local/lib/libblis.a")
     set( BLIS_LIB /usr/local/lib/libblis.a )
     set( BLIS_INCLUDE_DIR /usr/local/include/blis )
+elseif(EXISTS "/usr/lib/x86_64-linux-gnu/blis-serial/libblis.a")
+    set( BLIS_LIB /usr/lib/x86_64-linux-gnu/blis-serial/libblis.a )
+    set( BLIS_INCLUDE_DIR /usr/include/x86_64-linux-gnu/blis-serial )
+    set( BLIS_DOINIT FALSE)
 else()
     message(FATAL_ERROR "BLIS lib not found.")
 endif()

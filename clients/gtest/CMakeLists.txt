@@ -22,9 +22,9 @@
 # ########################################################################
 
 #enable_testing()
-find_package( GTest REQUIRED )
-find_package (Python3 REQUIRED COMPONENTS Interpreter)
-
+find_package(GTest REQUIRED )
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+find_package(BLAS)
 
 set(hipblaslt_test_source
     hipblaslt_gtest_main.cpp
@@ -60,7 +60,7 @@ target_include_directories( hipblaslt-test
     $<BUILD_INTERFACE:${GTEST_INCLUDE_DIRS}>
 )
 message("BLIS_INCLUDE_DIR=" ${BLIS_INCLUDE_DIR})
-target_link_libraries( hipblaslt-test PRIVATE ${BLAS_LIBRARY} ${GTEST_BOTH_LIBRARIES} roc::hipblaslt )
+target_link_libraries( hipblaslt-test PRIVATE BLAS::BLAS ${GTEST_BOTH_LIBRARIES} roc::hipblaslt )
 
 if( NOT BUILD_CUDA )
   target_link_libraries( hipblaslt-test PRIVATE hip::host hip::device )
@@ -85,9 +85,9 @@ target_compile_options(hipblaslt-test PRIVATE $<$<COMPILE_LANGUAGE:CXX>:${COMMON
 # target_compile_options does not go to linker like CMAKE_CXX_FLAGS does, so manually add
 
 if (BUILD_CUDA)
-  target_link_libraries( hipblaslt-test PRIVATE -llapack -lcblas )
+  target_link_libraries( hipblaslt-test PRIVATE -llapack BLAS::BLAS)
 else()
-  target_link_libraries( hipblaslt-test PRIVATE lapack cblas )
+  target_link_libraries( hipblaslt-test PRIVATE lapack BLAS::BLAS)
 endif()
 
 list( APPEND COMMON_LINK_LIBS "-lm -lstdc++fs")
@@ -99,7 +99,7 @@ else()
 endif()
 
 #if (NOT WIN32)
-#  target_link_libraries( hipblaslt-test PRIVATE lapack cblas )
+#  target_link_libraries( hipblaslt-test PRIVATE lapack BLAS::BLAS)
 #  list( APPEND COMMON_LINK_LIBS "-lm -lstdc++fs")
 #  if (NOT BUILD_FORTRAN_CLIENTS)
 #    list( APPEND COMMON_LINK_LIBS "-lgfortran") # for lapack

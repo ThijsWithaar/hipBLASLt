@@ -87,12 +87,15 @@ endif( )
 if( BUILD_CLIENTS_BENCHMARKS OR BUILD_CLIENTS_TESTS)
 
   # Linking lapack library requires fortran flags
-  find_package( cblas REQUIRED CONFIG )
+  find_package(BLAS REQUIRED)
   if(${BLIS_FOUND})
     set( BLAS_LIBRARY ${BLIS_LIB} )
     set( BLIS_CPP ../common/blis_interface.cpp )
+    if(${BLIS_DOINIT})
+      add_compile_definitions(BLIS_DOINIT)
+    endif()
   else()
-    set( BLAS_LIBRARY "blas" )
+    set( BLAS_LIBRARY ${BLAS_LIBRARIES} )
   endif()
 
   # Find the package ROCmSMI

@@ -95,8 +95,10 @@ if(TENSILE_USE_LLVM OR TENSILE_USE_MSGPACK)
     target_compile_definitions(TensileHost PUBLIC TENSILE_DEFAULT_SERIALIZATION)
 endif()
 
+include(CMakeFindDependencyMacro)
+
 if(TENSILE_USE_MSGPACK)
-    find_package(msgpack REQUIRED)
+    find_dependency(msgpack NAMES msgpack msgpack-cxx msgpack-c)
     target_compile_definitions(TensileHost PUBLIC -DTENSILE_MSGPACK=1)
 
     if(TARGET msgpackc-cxx)

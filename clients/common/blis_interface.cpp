@@ -29,7 +29,7 @@
 
 void setup_blis()
 {
-#ifndef WIN32
+#if !defined(WIN32) and defined(BLIS_DOINIT)
     bli_init();
 #endif
 }
